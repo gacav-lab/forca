@@ -4,21 +4,59 @@
 #include <stdio_ext.h>
 #include <stdlib.h>
 #include <string.h>
-
-char* fillCorrectLetters(int length);
+#include <time.h>
 
 int main(int argc, char **argv) {
-	char secretWord[] = "abacaxi", kick;
-	int length = strlen(secretWord);
-	char *correctLetters = fillCorrectLetters(length);
-	char lifes[] = "ooooo";
-	bool win, lose, correctLetter;
-	int indexLifes = 0;
+	char dictionary[][11] = {
+		"brasil",
+		"alemanha",
+		"dinamarca",
+		"equador",
+		"mexico",
+		"espanha",
+		"chile",
+		"bolivia",
+		"portugal",
+		"madagascar",
+		"japao",
+		"china",
+		"brunei",
+		"italia",
+		"canada",
+		"franca",
+		"catar",
+		"croacia",
+		"eslovenia",
+		"egito",
+		"honduras",
+		"hungria",
+		"idonesia",
+		"india",
+		"ira",
+		"iraque",
+		"jamaica",
+		"nepal",
+		"nicaragua",
+		"nigeria"
+	}, *secretWord, *correctLetters, lifes[] = "ooooo", kick;
+	bool win, lose, correct;
+	int length, indexLifes = 0, indexDictionary;
+
+	srand(time(NULL));
 
 	win = lose = false;
+	indexDictionary = rand() % 30; // 0 a 29
+	length = strlen(dictionary[indexDictionary]);
+	secretWord = malloc(length * sizeof(char));
+	strcpy(secretWord, dictionary[indexDictionary]);
+	correctLetters = malloc(length * sizeof(char));
+
+	for(int i = 0; i < length; i++) {
+		*(correctLetters + i) = '-';
+	}
 
 	while(!win && !lose) {
-		correctLetter = false;
+		correct = false;
 		printf("%s\n\n", correctLetters);
 
 		printf("vidas: %s\n", lifes);
@@ -28,13 +66,12 @@ int main(int argc, char **argv) {
 		for(int i = 0; i < length; i++) {
 			if(toupper(kick) == toupper(secretWord[i])) {
 				correctLetters[i] = kick;
-				correctLetter = true;
+				correct = true;
 			}
 		}
 
-		if(!correctLetter) {
-			lifes[indexLifes] = 'x';
-			indexLifes++;
+		if(!correct) {
+			lifes[indexLifes++] = 'x';
 		}
 
 		if(strcmp(lifes, "xxxxx") == 0) {
@@ -55,14 +92,4 @@ int main(int argc, char **argv) {
 	}
 
 	return EXIT_SUCCESS;
-}
-
-char* fillCorrectLetters(int length) {
-	char *memory = malloc(length * sizeof(char));
-
-	for(int i = 0; i < length; i++) {
-		*(memory + i) = '-';
-	}
-
-	return memory;
 }
