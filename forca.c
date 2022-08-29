@@ -6,12 +6,16 @@
 #include <string.h>
 #include <time.h>
 #define TOTAL_LIVES 5
+#define NUMBER_OF_COUNTRIES 30
+#define NUMBER_OF_FRUITS 15
+#define NUMBER_OF_COLORS 16
+#define NUMBER_OF_THEMES 3
 
 void initializeLives(char *lives);
 void initializeCorrectLetters(char *correctLetters, int length);
 
 int main(int argc, char **argv) {
-	char dictionary[][11] = {
+	char countries[][11] = {
 		"Brasil",
 		"Alemanha",
 		"Dinamarca",
@@ -42,26 +46,90 @@ int main(int argc, char **argv) {
 		"Nepal",
 		"Nicaragua",
 		"Nigeria"
-	}, *secretWord = NULL, *correctLetters = NULL, lives[TOTAL_LIVES], kick;
+	}, fruits[][11] = {
+		"Pitanga",
+		"Acerola",
+		"Tomate",
+		"Manga",
+		"Abacaxi",
+		"Melancia",
+		"Morango",
+		"Banana",
+		"Maracuja",
+		"Melao",
+		"Cacau",
+		"Pessego",
+		"Abacate",
+		"Mamao",
+		"Maracujina"
+	}, colors[][10] = {
+		"Azul",
+		"Ciano",
+		"Amarelo",
+		"Roxo",
+		"Rosa",
+		"Dourado",
+		"Carmesim",
+		"Carmim",
+		"Escarlate",
+		"Marrom",
+		"Cinza",
+		"Preto",
+		"Branco",
+		"Laranja",
+		"Vermelho",
+		"Verde"
+	}, *secretWord = NULL, *correctLetters = NULL, *lives = malloc(TOTAL_LIVES * sizeof(char)), *theme, kick;
 	bool win = false, lose = false, correct;
-	int length, indexLives = TOTAL_LIVES - 1, indexDictionary;
+	int length, indexLives = TOTAL_LIVES - 1, index, themeIndex;
 
 	srand(time(NULL));
 
-	indexDictionary = rand() % 30; // 0 a 29
-	length = strlen(dictionary[indexDictionary]);
-	secretWord = malloc(length * sizeof(char));
-	correctLetters = malloc(length * sizeof(char));
-	strcpy(secretWord, dictionary[indexDictionary]);
+	enum THEME {
+		//o prefixo "C", se refere a "constant", para diferenciá-las dos arrays multidimensionais
+		CCountry,
+		CFruits,
+		CColors
+	} ETheme;
 
-	initializeLives(&lives[0]);
+	ETheme = rand() % NUMBER_OF_THEMES;
+
+	if(ETheme == CCountry) {
+		theme = malloc(strlen("Paises") * sizeof(char));
+		theme = "paises";
+		index = rand() % NUMBER_OF_COUNTRIES;
+		length = strlen(countries[index]);
+		secretWord = malloc(length * sizeof(char));
+		correctLetters = malloc(length * sizeof(char));
+		strcpy(secretWord, countries[index]);
+	} else if(ETheme == CFruits) {
+		theme = malloc(strlen("Frutas") * sizeof(char));
+		theme = "frutas";
+		index = rand() % NUMBER_OF_FRUITS;
+		length = strlen(fruits[index]);
+		secretWord = malloc(length * sizeof(char));
+		correctLetters = malloc(length * sizeof(char));
+		strcpy(secretWord, fruits[index]);
+	} else {
+		theme = malloc(strlen("Cores") * sizeof(char));
+		theme = "cores";
+		index = rand() % NUMBER_OF_COLORS;
+		length = strlen(colors[index]);
+		secretWord = malloc(length * sizeof(char));
+		correctLetters = malloc(length * sizeof(char));
+		strcpy(secretWord, colors[index]);
+	}
+
+	initializeLives(lives);
 	initializeCorrectLetters(correctLetters, length);
 
 	while(!win && !lose) {
 		correct = false;
+
 		printf("%s\n\n", correctLetters);
 
-		printf("vidas: %s\n", lives);
+		printf("Tema: %s\n", theme);
+		printf("Vidas: %s\n", lives);
 		printf("Chute: ");
 		scanf("%c", &kick);
 
@@ -76,7 +144,7 @@ int main(int argc, char **argv) {
 			lives[indexLives--] = ' ';
 		}
 
-		if(lives[0] == ' ') {
+		if(*lives == ' ') {
 			lose = true;
 			system("clear");
 			printf("Palavra secreta: %s\n", secretWord);
