@@ -7,49 +7,53 @@
 #include <time.h>
 
 int main(int argc, char **argv) {
+	const int TOTAL_LIFES = 5;
 	char dictionary[][11] = {
-		"brasil",
-		"alemanha",
-		"dinamarca",
-		"equador",
-		"mexico",
-		"espanha",
-		"chile",
-		"bolivia",
-		"portugal",
-		"madagascar",
-		"japao",
-		"china",
-		"brunei",
-		"italia",
-		"canada",
-		"franca",
-		"catar",
-		"croacia",
-		"eslovenia",
-		"egito",
-		"honduras",
-		"hungria",
-		"idonesia",
-		"india",
-		"ira",
-		"iraque",
-		"jamaica",
-		"nepal",
-		"nicaragua",
-		"nigeria"
-	}, *secretWord, *correctLetters, lifes[] = "ooooo", kick;
-	bool win, lose, correct;
-	int length, indexLifes = 0, indexDictionary;
+		"Brasil",
+		"Alemanha",
+		"Dinamarca",
+		"Equador",
+		"Mexico",
+		"Espanha",
+		"Chile",
+		"Bolivia",
+		"Portugal",
+		"Madagascar",
+		"Japao",
+		"China",
+		"Brunei",
+		"Italia",
+		"Canada",
+		"Franca",
+		"Catar",
+		"Croacia",
+		"Eslovenia",
+		"Egito",
+		"Honduras",
+		"Hungria",
+		"Idonesia",
+		"India",
+		"Ira",
+		"Iraque",
+		"Jamaica",
+		"Nepal",
+		"Nicaragua",
+		"Nigeria"
+	}, *secretWord = NULL, *correctLetters = NULL, lifes[TOTAL_LIFES], kick;
+	bool win = false, lose = false, correct;
+	int length, indexLifes = TOTAL_LIFES - 1, indexDictionary;
 
 	srand(time(NULL));
 
-	win = lose = false;
 	indexDictionary = rand() % 30; // 0 a 29
 	length = strlen(dictionary[indexDictionary]);
 	secretWord = malloc(length * sizeof(char));
-	strcpy(secretWord, dictionary[indexDictionary]);
 	correctLetters = malloc(length * sizeof(char));
+	strcpy(secretWord, dictionary[indexDictionary]);
+
+	for(int i = 0; i < TOTAL_LIFES; i++) {
+		lifes[i] = 'o';
+	}
 
 	for(int i = 0; i < length; i++) {
 		*(correctLetters + i) = '-';
@@ -71,20 +75,25 @@ int main(int argc, char **argv) {
 		}
 
 		if(!correct) {
-			lifes[indexLifes++] = 'x';
+			lifes[indexLifes--] = ' ';
 		}
 
-		if(strcmp(lifes, "xxxxx") == 0) {
+		if(lifes[0] == ' ') {
 			lose = true;
 			system("clear");
-			printf("vidas: %s\n", lifes);
+			printf("Palavra secreta: %s\n", secretWord);
 			puts("Você perdeu!!! :(");
+		}
+
+		if(islower(*correctLetters)) {
+			*correctLetters = toupper(*correctLetters);
 		}
 
 		if (strcmp(secretWord, correctLetters) == 0) {
 			win = true;
 			system("clear");
-			printf("vidas: %s\n", lifes);
+			printf("Vidas: %s\n", lifes);
+			printf("Palavra secreta: %s\n", secretWord);
 			puts("Você venceu!!! :)");
 		}
 
