@@ -166,6 +166,11 @@ int main(int argc, char **argv) {
 		__fpurge(stdin);
 	}
 
+        free(secretWord);
+        free(correctLetters);
+        free(lives);
+        free(theme);
+
 	return EXIT_SUCCESS;
 }
 
