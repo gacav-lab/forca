@@ -5,9 +5,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#define TOTAL_LIVES 5
+
+void initializeLives(char *lives);
+void initializeCorrectLetters(char *correctLetters, int length);
 
 int main(int argc, char **argv) {
-	const int TOTAL_LIFES = 5;
 	char dictionary[][11] = {
 		"Brasil",
 		"Alemanha",
@@ -39,9 +42,9 @@ int main(int argc, char **argv) {
 		"Nepal",
 		"Nicaragua",
 		"Nigeria"
-	}, *secretWord = NULL, *correctLetters = NULL, lifes[TOTAL_LIFES], kick;
+	}, *secretWord = NULL, *correctLetters = NULL, lives[TOTAL_LIVES], kick;
 	bool win = false, lose = false, correct;
-	int length, indexLifes = TOTAL_LIFES - 1, indexDictionary;
+	int length, indexLives = TOTAL_LIVES - 1, indexDictionary;
 
 	srand(time(NULL));
 
@@ -51,19 +54,14 @@ int main(int argc, char **argv) {
 	correctLetters = malloc(length * sizeof(char));
 	strcpy(secretWord, dictionary[indexDictionary]);
 
-	for(int i = 0; i < TOTAL_LIFES; i++) {
-		lifes[i] = 'o';
-	}
-
-	for(int i = 0; i < length; i++) {
-		*(correctLetters + i) = '-';
-	}
+	initializeLives(&lives[0]);
+	initializeCorrectLetters(correctLetters, length);
 
 	while(!win && !lose) {
 		correct = false;
 		printf("%s\n\n", correctLetters);
 
-		printf("vidas: %s\n", lifes);
+		printf("vidas: %s\n", lives);
 		printf("Chute: ");
 		scanf("%c", &kick);
 
@@ -75,10 +73,10 @@ int main(int argc, char **argv) {
 		}
 
 		if(!correct) {
-			lifes[indexLifes--] = ' ';
+			lives[indexLives--] = ' ';
 		}
 
-		if(lifes[0] == ' ') {
+		if(lives[0] == ' ') {
 			lose = true;
 			system("clear");
 			printf("Palavra secreta: %s\n", secretWord);
@@ -92,7 +90,7 @@ int main(int argc, char **argv) {
 		if (strcmp(secretWord, correctLetters) == 0) {
 			win = true;
 			system("clear");
-			printf("Vidas: %s\n", lifes);
+			printf("Vidas: %s\n", lives);
 			printf("Palavra secreta: %s\n", secretWord);
 			puts("Você venceu!!! :)");
 		}
@@ -101,4 +99,16 @@ int main(int argc, char **argv) {
 	}
 
 	return EXIT_SUCCESS;
+}
+
+void initializeLives(char *lives) {
+	for(int i = 0; i < TOTAL_LIVES; i++) {
+		*(lives + i) = 'o';
+	}
+}
+
+void initializeCorrectLetters(char *correctLetters, int length) {
+	for(int i = 0; i < length; i++) {
+		*(correctLetters + i) = '-';
+	}
 }
