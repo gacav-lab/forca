@@ -9,10 +9,11 @@
 #define NUMBER_OF_COUNTRIES 30
 #define NUMBER_OF_FRUITS 15
 #define NUMBER_OF_COLORS 16
-#define NUMBER_OF_THEMES 3
+#define NUMBER_OF_ADJECTIVES 31
+#define NUMBER_OF_THEMES 4
 
-void initializeLives(char *lives);
-void initializeCorrectLetters(char *correctLetters, int length);
+void initializeLives(char *lives, const char SYMBOL);
+void initializeCorrectLetters(char *correctLetters, const char SYMBOL, int length);
 
 int main(int argc, char **argv) {
 	char countries[][11] = {
@@ -79,40 +80,83 @@ int main(int argc, char **argv) {
 		"Laranja",
 		"Vermelho",
 		"Verde"
-	}, *secretWord = NULL, *correctLetters = NULL, *lives = malloc(TOTAL_LIVES * sizeof(char)), *theme, kick;
+	}, adjectives[][15] = {
+		"Bonito",
+		"Alto",
+		"Elegante",
+		"Formoso",
+		"Inteligente",
+		"Carismatico",
+		"Compreensivo",
+		"Reflexivo",
+		"Pensativo",
+		"Forte",
+		"Talentoso",
+		"Agradavel",
+		"Cheiroso",
+		"Aplicado",
+		"Companheiro",
+		"Determinado",
+		"Educado",
+		"Escrupuloso",
+		"Extraordinario",
+		"Habilidoso",
+		"Genuino",
+		"Independente",
+		"Maravilhoso",
+		"Organizado",
+		"Perseverante",
+		"Persistente",
+		"Perspicaz",
+		"Valoroso",
+		"Verdadeiro",
+		"Zeloso",
+		"Cuidadoso"
+	}, *secretWord = NULL, *correctLetters = NULL, *lives = malloc(TOTAL_LIVES * sizeof(char)), *topic, kick;
+	const char SYMBOL_OF_LIFE = '@', SYMBOL_OF_NONE = '~';
 	bool win = false, lose = false, correct;
-	int length, indexLives = TOTAL_LIVES - 1, index, themeIndex;
+	const int scoreRate = 218;
+	int length, indexLives = TOTAL_LIVES - 1, index, topicIndex, score = scoreRate * TOTAL_LIVES;
 
 	srand(time(NULL));
 
-	enum THEME {
-		//o prefixo "C", se refere a "constant", para diferenciá-las dos arrays multidimensionais
+	enum TOPIC {
+		//prefixo "C" de "constant", adicional, para diferenciá-las de arrays multidimensionais de mesmo identificador
 		CCountry,
 		CFruits,
-		CColors
-	} ETheme;
+		CColors,
+		CAdjectives
+	} ETopic;
 
-	ETheme = rand() % NUMBER_OF_THEMES;
+	ETopic = rand() % NUMBER_OF_THEMES;
 
-	if(ETheme == CCountry) {
-		theme = malloc(strlen("Paises") * sizeof(char));
-		theme = "paises";
+	if(ETopic == CCountry) {
+		topic = malloc(strlen("Paises") * sizeof(char));
+		topic = "paises";
 		index = rand() % NUMBER_OF_COUNTRIES;
 		length = strlen(countries[index]);
 		secretWord = malloc(length * sizeof(char));
 		correctLetters = malloc(length * sizeof(char));
 		strcpy(secretWord, countries[index]);
-	} else if(ETheme == CFruits) {
-		theme = malloc(strlen("Frutas") * sizeof(char));
-		theme = "frutas";
+	} else if(ETopic == CFruits) {
+		topic = malloc(strlen("Frutas") * sizeof(char));
+		topic = "frutas";
 		index = rand() % NUMBER_OF_FRUITS;
 		length = strlen(fruits[index]);
 		secretWord = malloc(length * sizeof(char));
 		correctLetters = malloc(length * sizeof(char));
 		strcpy(secretWord, fruits[index]);
+	} else if(ETopic == CAdjectives) {
+		topic = malloc(strlen("Adjetivos") * sizeof(char));
+		topic = "adjetivos";
+		index = rand() % NUMBER_OF_ADJECTIVES;
+		length = strlen(adjectives[index]);
+		secretWord = malloc(length * sizeof(char));
+		correctLetters = malloc(length * sizeof(char));
+		strcpy(secretWord, adjectives[index]);
 	} else {
-		theme = malloc(strlen("Cores") * sizeof(char));
-		theme = "cores";
+		topic = malloc(strlen("Cores") * sizeof(char));
+		topic = "cores";
 		index = rand() % NUMBER_OF_COLORS;
 		length = strlen(colors[index]);
 		secretWord = malloc(length * sizeof(char));
@@ -120,15 +164,15 @@ int main(int argc, char **argv) {
 		strcpy(secretWord, colors[index]);
 	}
 
-	initializeLives(lives);
-	initializeCorrectLetters(correctLetters, length);
+	initializeLives(lives, SYMBOL_OF_LIFE);
+	initializeCorrectLetters(correctLetters, SYMBOL_OF_NONE, length);
 
 	while(!win && !lose) {
 		correct = false;
 
 		printf("%s\n\n", correctLetters);
 
-		printf("Tema: %s\n", theme);
+		printf("Tópico: %s\n", topic);
 		printf("Vidas: %s\n", lives);
 		printf("Chute: ");
 		scanf("%c", &kick);
@@ -142,11 +186,13 @@ int main(int argc, char **argv) {
 
 		if(!correct) {
 			lives[indexLives--] = ' ';
+			score -= scoreRate;
 		}
 
 		if(*lives == ' ') {
 			lose = true;
 			system("clear");
+			printf("Pontuação: %d\n", score);
 			printf("Palavra secreta: %s\n", secretWord);
 			puts("Você perdeu!!! :(");
 		}
@@ -159,6 +205,7 @@ int main(int argc, char **argv) {
 			win = true;
 			system("clear");
 			printf("Vidas: %s\n", lives);
+			printf("Pontuação: %d\n", score);
 			printf("Palavra secreta: %s\n", secretWord);
 			puts("Você venceu!!! :)");
 		}
@@ -166,22 +213,21 @@ int main(int argc, char **argv) {
 		__fpurge(stdin);
 	}
 
-        free(secretWord);
-        free(correctLetters);
-        free(lives);
-        free(theme);
+	free(secretWord);
+	free(correctLetters);
+	free(lives);
 
 	return EXIT_SUCCESS;
 }
 
-void initializeLives(char *lives) {
+void initializeLives(char *lives, const char SYMBOL) {
 	for(int i = 0; i < TOTAL_LIVES; i++) {
-		*(lives + i) = 'o';
+		*(lives + i) = SYMBOL;
 	}
 }
 
-void initializeCorrectLetters(char *correctLetters, int length) {
+void initializeCorrectLetters(char *correctLetters, const char SYMBOL, int length) {
 	for(int i = 0; i < length; i++) {
-		*(correctLetters + i) = '-';
+		*(correctLetters + i) = SYMBOL;
 	}
 }
