@@ -12,6 +12,14 @@
 #define NUMBER_OF_ADJECTIVES 31
 #define NUMBER_OF_THEMES 4
 
+// Autor: Gabriel Cavalcante de Jesus Oliveira
+// Data de criação: 28/08/2022
+// Linguagem de programação: C
+// Versão da linguagem: C17
+// Compatível com: sistemas Unix-like
+// Compilador: gcc
+// Github: https://github.com/gabrielcavalcante-cs/games
+
 void initializeLives(char *lives, const char SYMBOL);
 void initializeCorrectLetters(char *correctLetters, const char SYMBOL, int length);
 
