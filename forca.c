@@ -18,10 +18,12 @@
 // Versão da linguagem: C17
 // Compatível com: sistemas Unix-like
 // Compilador: gcc
-// Github: https://github.com/gabrielcavalcante-cs/games
+// Github: https://github.com/gabrielcavalcante-cs
 
+void title(void);
 void initializeLives(char *lives, const char SYMBOL);
 void initializeCorrectLetters(char *correctLetters, const char SYMBOL, int length);
+void wasAllocated(char *array);
 
 int main(int argc, char **argv) {
 	char countries[][11] = {
@@ -120,55 +122,69 @@ int main(int argc, char **argv) {
 		"Verdadeiro",
 		"Zeloso",
 		"Cuidadoso"
-	}, *secretWord = NULL, *correctLetters = NULL, *lives = malloc(TOTAL_LIVES * sizeof(char)), *topic, kick;
+	}, *secretWord = NULL, *correctLetters = NULL, *lives, *topic, kick;
 	const char SYMBOL_OF_LIFE = '@', SYMBOL_OF_NONE = '~';
 	bool win = false, lose = false, correct;
 	const int scoreRate = 218;
 	int length, indexLives = TOTAL_LIVES - 1, index, topicIndex, score = scoreRate * TOTAL_LIVES;
 
+	lives = malloc(TOTAL_LIVES * sizeof(char));
+	wasAllocated(lives);
+
 	srand(time(NULL));
 
-	enum TOPIC {
-		//prefixo "C" de "constant", adicional, para diferenciá-las de arrays multidimensionais de mesmo identificador
-		CCountry,
-		CFruits,
-		CColors,
-		CAdjectives
+	enum Topic {
+		ECountries,
+		EFruits,
+		EColors,
+		EAdjectives
 	} ETopic;
 
 	ETopic = rand() % NUMBER_OF_THEMES;
 
-	if(ETopic == CCountry) {
+	if(ETopic == ECountries) {
 		topic = malloc(strlen("Paises") * sizeof(char));
+		wasAllocated(topic);
 		topic = "paises";
 		index = rand() % NUMBER_OF_COUNTRIES;
 		length = strlen(countries[index]);
 		secretWord = malloc(length * sizeof(char));
+		wasAllocated(secretWord);
 		correctLetters = malloc(length * sizeof(char));
+		wasAllocated(correctLetters);
 		strcpy(secretWord, countries[index]);
-	} else if(ETopic == CFruits) {
+	} else if(ETopic == EFruits) {
 		topic = malloc(strlen("Frutas") * sizeof(char));
+		wasAllocated(topic);
 		topic = "frutas";
 		index = rand() % NUMBER_OF_FRUITS;
 		length = strlen(fruits[index]);
 		secretWord = malloc(length * sizeof(char));
+		wasAllocated(secretWord);
 		correctLetters = malloc(length * sizeof(char));
+		wasAllocated(correctLetters);
 		strcpy(secretWord, fruits[index]);
-	} else if(ETopic == CAdjectives) {
+	} else if(ETopic == EAdjectives) {
 		topic = malloc(strlen("Adjetivos") * sizeof(char));
+		wasAllocated(topic);
 		topic = "adjetivos";
 		index = rand() % NUMBER_OF_ADJECTIVES;
 		length = strlen(adjectives[index]);
 		secretWord = malloc(length * sizeof(char));
+		wasAllocated(secretWord);
 		correctLetters = malloc(length * sizeof(char));
+		wasAllocated(correctLetters);
 		strcpy(secretWord, adjectives[index]);
 	} else {
 		topic = malloc(strlen("Cores") * sizeof(char));
+		wasAllocated(topic);
 		topic = "cores";
 		index = rand() % NUMBER_OF_COLORS;
 		length = strlen(colors[index]);
 		secretWord = malloc(length * sizeof(char));
+		wasAllocated(secretWord);
 		correctLetters = malloc(length * sizeof(char));
+		wasAllocated(correctLetters);
 		strcpy(secretWord, colors[index]);
 	}
 
@@ -176,6 +192,8 @@ int main(int argc, char **argv) {
 	initializeCorrectLetters(correctLetters, SYMBOL_OF_NONE, length);
 
 	while(!win && !lose) {
+		system("clear");
+		title();
 		correct = false;
 
 		printf("%s\n\n", correctLetters);
@@ -200,6 +218,7 @@ int main(int argc, char **argv) {
 		if(*lives == ' ') {
 			lose = true;
 			system("clear");
+			title();
 			printf("Pontuação: %d\n", score);
 			printf("Palavra secreta: %s\n", secretWord);
 			puts("Você perdeu!!! :(");
@@ -212,6 +231,7 @@ int main(int argc, char **argv) {
 		if (strcmp(secretWord, correctLetters) == 0) {
 			win = true;
 			system("clear");
+			title();
 			printf("Vidas: %s\n", lives);
 			printf("Pontuação: %d\n", score);
 			printf("Palavra secreta: %s\n", secretWord);
@@ -226,6 +246,19 @@ int main(int argc, char **argv) {
 	free(lives);
 
 	return EXIT_SUCCESS;
+}
+
+void title() {
+	puts("x===============x\n"\
+		 "| JOGO DA FORCA |\n"\
+		 "x===============x\n");
+}
+
+void wasAllocated(char *array) {
+	if(array == NULL) {
+		fprintf(stderr, "Erro: falha na alocação de memória!\n");
+		exit(EXIT_FAILURE);
+	}
 }
 
 void initializeLives(char *lives, const char SYMBOL) {
