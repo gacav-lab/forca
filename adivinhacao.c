@@ -42,7 +42,8 @@ int main(int argc, char **argv) {
 			win = true;
 		}
 
-		// bug na realocação: realloc(): invalid next size
+		/* O compilador gcc acusa erro na realocação, isso não acontece em outros compiladores, como
+                // mingw64 e clang */
 		kicks = (int*) realloc(kicks, sizeof(char));
 		wasAllocated(kicks);
 
