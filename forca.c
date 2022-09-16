@@ -10,123 +10,49 @@
 #define NUMBER_OF_FRUITS 15
 #define NUMBER_OF_COLORS 16
 #define NUMBER_OF_ADJECTIVES 31
-#define NUMBER_OF_THEMES 4
+#define NUMBER_OF_TOPICS 4
 
 // Autor: Gabriel Cavalcante de Jesus Oliveira
 // Data de criação: 28/08/2022
 // Linguagem de programação: C
 // Versão da linguagem: C17
 // Compatível com: sistemas Unix-like
-// Compilador: gcc
+// Compilador: GCC
 // Github: https://github.com/gabrielcavalcante-cs
 
 void title(void);
 void initializeLives(char *lives, const char SYMBOL);
-void initializeCorrectLetters(char *correctLetters, const char SYMBOL, int length);
+void initializeCorrectLetters(char *correctLetters, const char SYMBOL, int stringLength);
 void wasAllocated(char *array);
 
 int main(int argc, char **argv) {
 	char countries[][11] = {
-		"Brasil",
-		"Alemanha",
-		"Dinamarca",
-		"Equador",
-		"Mexico",
-		"Espanha",
-		"Chile",
-		"Bolivia",
-		"Portugal",
-		"Madagascar",
-		"Japao",
-		"China",
-		"Brunei",
-		"Italia",
-		"Canada",
-		"Franca",
-		"Catar",
-		"Croacia",
-		"Eslovenia",
-		"Egito",
-		"Honduras",
-		"Hungria",
-		"Idonesia",
-		"India",
-		"Ira",
-		"Iraque",
-		"Jamaica",
-		"Nepal",
-		"Nicaragua",
-		"Nigeria"
+		"Brasil", "Alemanha", "Dinamarca", "Equador", "Mexico", "Espanha",
+		"Chile", "Bolivia", "Portugal", "Madagascar", "Japao", "China",
+		"Brunei", "Italia", "Canada", "Franca", "Catar", "Croacia",
+		"Eslovenia", "Egito", "Honduras", "Hungria", "Idonesia", "India",
+		"Ira", "Iraque", "Jamaica", "Nepal", "Nicaragua", "Nigeria"
 	}, fruits[][11] = {
-		"Pitanga",
-		"Acerola",
-		"Tomate",
-		"Manga",
-		"Abacaxi",
-		"Melancia",
-		"Morango",
-		"Banana",
-		"Maracuja",
-		"Melao",
-		"Cacau",
-		"Pessego",
-		"Abacate",
-		"Mamao",
-		"Maracujina"
+		"Pitanga", "Acerola", "Tomate", "Manga", "Abacaxi", "Melancia",
+		"Morango", "Banana", "Maracuja", "Melao", "Cacau", "Pessego",
+		"Abacate", "Mamao", "Maracujina"
 	}, colors[][10] = {
-		"Azul",
-		"Ciano",
-		"Amarelo",
-		"Roxo",
-		"Rosa",
-		"Dourado",
-		"Carmesim",
-		"Carmim",
-		"Escarlate",
-		"Marrom",
-		"Cinza",
-		"Preto",
-		"Branco",
-		"Laranja",
-		"Vermelho",
-		"Verde"
+		"Azul", "Ciano", "Amarelo", "Roxo", "Rosa", "Dourado", "Carmesim",
+		"Carmim", "Escarlate", "Marrom", "Cinza", "Preto", "Branco",
+		"Laranja", "Vermelho", "Verde"
 	}, adjectives[][15] = {
-		"Bonito",
-		"Alto",
-		"Elegante",
-		"Formoso",
-		"Inteligente",
-		"Carismatico",
-		"Compreensivo",
-		"Reflexivo",
-		"Pensativo",
-		"Forte",
-		"Talentoso",
-		"Agradavel",
-		"Cheiroso",
-		"Aplicado",
-		"Companheiro",
-		"Determinado",
-		"Educado",
-		"Escrupuloso",
-		"Extraordinario",
-		"Habilidoso",
-		"Genuino",
-		"Independente",
-		"Maravilhoso",
-		"Organizado",
-		"Perseverante",
-		"Persistente",
-		"Perspicaz",
-		"Valoroso",
-		"Verdadeiro",
-		"Zeloso",
-		"Cuidadoso"
+		"Bonito", "Alto", "Elegante", "Formoso", "Inteligente",
+		"Carismatico", "Compreensivo", "Reflexivo", "Pensativo", "Forte",
+		"Talentoso", "Agradavel", "Cheiroso", "Aplicado", "Companheiro",
+		"Determinado", "Educado", "Escrupuloso", "Extraordinario",
+		"Habilidoso", "Genuino", "Independente", "Maravilhoso",
+		"Organizado", "Perseverante", "Persistente", "Perspicaz",
+		"Valoroso", "Verdadeiro", "Zeloso", "Cuidadoso"
 	}, *secretWord = NULL, *correctLetters = NULL, *lives, *topic, kick;
 	const char SYMBOL_OF_LIFE = '@', SYMBOL_OF_NONE = '~';
 	bool win = false, lose = false, correct;
-	const int scoreRate = 218;
-	int length, indexLives = TOTAL_LIVES - 1, index, topicIndex, score = scoreRate * TOTAL_LIVES;
+	const int SCORE_RATE = 218, BONUS_RATE = 18;
+	int stringLength, indexLives = TOTAL_LIVES - 1, index, topicIndex, score = SCORE_RATE * TOTAL_LIVES, bonus = 0;
 
 	lives = malloc(TOTAL_LIVES * sizeof(char));
 	wasAllocated(lives);
@@ -140,17 +66,17 @@ int main(int argc, char **argv) {
 		EAdjectives
 	} ETopic;
 
-	ETopic = rand() % NUMBER_OF_THEMES;
+	ETopic = rand() % NUMBER_OF_TOPICS;
 
 	if(ETopic == ECountries) {
 		topic = malloc(strlen("Paises") * sizeof(char));
 		wasAllocated(topic);
 		topic = "paises";
 		index = rand() % NUMBER_OF_COUNTRIES;
-		length = strlen(countries[index]);
-		secretWord = malloc(length * sizeof(char));
+		stringLength = strlen(countries[index]);
+		secretWord = malloc(stringLength * sizeof(char));
 		wasAllocated(secretWord);
-		correctLetters = malloc(length * sizeof(char));
+		correctLetters = malloc(stringLength * sizeof(char));
 		wasAllocated(correctLetters);
 		strcpy(secretWord, countries[index]);
 	} else if(ETopic == EFruits) {
@@ -158,10 +84,10 @@ int main(int argc, char **argv) {
 		wasAllocated(topic);
 		topic = "frutas";
 		index = rand() % NUMBER_OF_FRUITS;
-		length = strlen(fruits[index]);
-		secretWord = malloc(length * sizeof(char));
+		stringLength = strlen(fruits[index]);
+		secretWord = malloc(stringLength * sizeof(char));
 		wasAllocated(secretWord);
-		correctLetters = malloc(length * sizeof(char));
+		correctLetters = malloc(stringLength * sizeof(char));
 		wasAllocated(correctLetters);
 		strcpy(secretWord, fruits[index]);
 	} else if(ETopic == EAdjectives) {
@@ -169,10 +95,10 @@ int main(int argc, char **argv) {
 		wasAllocated(topic);
 		topic = "adjetivos";
 		index = rand() % NUMBER_OF_ADJECTIVES;
-		length = strlen(adjectives[index]);
-		secretWord = malloc(length * sizeof(char));
+		stringLength = strlen(adjectives[index]);
+		secretWord = malloc(stringLength * sizeof(char));
 		wasAllocated(secretWord);
-		correctLetters = malloc(length * sizeof(char));
+		correctLetters = malloc(stringLength * sizeof(char));
 		wasAllocated(correctLetters);
 		strcpy(secretWord, adjectives[index]);
 	} else {
@@ -180,16 +106,22 @@ int main(int argc, char **argv) {
 		wasAllocated(topic);
 		topic = "cores";
 		index = rand() % NUMBER_OF_COLORS;
-		length = strlen(colors[index]);
-		secretWord = malloc(length * sizeof(char));
+		stringLength = strlen(colors[index]);
+		secretWord = malloc(stringLength * sizeof(char));
 		wasAllocated(secretWord);
-		correctLetters = malloc(length * sizeof(char));
+		correctLetters = malloc(stringLength * sizeof(char));
 		wasAllocated(correctLetters);
 		strcpy(secretWord, colors[index]);
 	}
 
 	initializeLives(lives, SYMBOL_OF_LIFE);
-	initializeCorrectLetters(correctLetters, SYMBOL_OF_NONE, length);
+	initializeCorrectLetters(correctLetters, SYMBOL_OF_NONE, stringLength);
+
+	for(int counter = 1; counter <= stringLength; counter++) {
+		bonus += BONUS_RATE;
+	}
+
+	score += bonus;
 
 	while(!win && !lose) {
 		system("clear");
@@ -197,13 +129,12 @@ int main(int argc, char **argv) {
 		correct = false;
 
 		printf("%s\n\n", correctLetters);
-
 		printf("Tópico: %s\n", topic);
 		printf("Vidas: %s\n", lives);
 		printf("Chute: ");
 		scanf("%c", &kick);
 
-		for(int i = 0; i < length; i++) {
+		for(int i = 0; i < stringLength; i++) {
 			if(toupper(kick) == toupper(secretWord[i])) {
 				correctLetters[i] = kick;
 				correct = true;
@@ -212,7 +143,7 @@ int main(int argc, char **argv) {
 
 		if(!correct) {
 			lives[indexLives--] = ' ';
-			score -= scoreRate;
+			score -= SCORE_RATE;
 		}
 
 		if(*lives == ' ') {
@@ -267,8 +198,8 @@ void initializeLives(char *lives, const char SYMBOL) {
 	}
 }
 
-void initializeCorrectLetters(char *correctLetters, const char SYMBOL, int length) {
-	for(int i = 0; i < length; i++) {
+void initializeCorrectLetters(char *correctLetters, const char SYMBOL, int stringLength) {
+	for(int i = 0; i < stringLength; i++) {
 		*(correctLetters + i) = SYMBOL;
 	}
 }
