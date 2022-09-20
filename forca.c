@@ -12,13 +12,17 @@
 #define NUMBER_OF_ADJECTIVES 31
 #define NUMBER_OF_TOPICS 4
 
-// Autor: Gabriel Cavalcante de Jesus Oliveira
-// Data de criação: 28/08/2022
-// Linguagem de programação: C
-// Versão da linguagem: C17
-// Compatível com: sistemas Unix-like
-// Compilador: GCC
-// Github: https://github.com/gabrielcavalcante-cs
+/*
+x=================================================x
+| Autor: Gabriel Cavalcante de Jesus Oliveira     |
+| Data: 28/08/2022                                |
+| Linguagem de programação: C                     |
+| Versão da linguagem: C17                        |
+| Compatível com: sistemas Unix-like              |
+| Compilador: GCC                                 |
+| Github: https://github.com/gabrielcavalcante-cs |
+x=================================================x
+*/
 
 void title(void);
 void initializeLives(char *lives, const char SYMBOL);
@@ -48,29 +52,26 @@ int main(int argc, char **argv) {
 		"Habilidoso", "Genuino", "Independente", "Maravilhoso",
 		"Organizado", "Perseverante", "Persistente", "Perspicaz",
 		"Valoroso", "Verdadeiro", "Zeloso", "Cuidadoso"
-	}, *secretWord = NULL, *correctLetters = NULL, *lives, *topic, kick;
+	}, *secretWord = NULL, *correctLetters = NULL, *lives = NULL, *topic = NULL, kick;
 	const char SYMBOL_OF_LIFE = '@', SYMBOL_OF_NONE = '~';
 	bool win = false, lose = false, correct;
 	const int SCORE_RATE = 218, BONUS_RATE = 18;
-	int stringLength, indexLives = TOTAL_LIVES - 1, index, topicIndex, score = SCORE_RATE * TOTAL_LIVES, bonus = 0;
+	int stringLength, indexLives = TOTAL_LIVES - 1, topicIndex, index, score = SCORE_RATE * TOTAL_LIVES, bonus = 0;
 
 	lives = malloc(TOTAL_LIVES * sizeof(char));
 	wasAllocated(lives);
 
 	srand(time(NULL));
 
-	enum Topic {
-		ECountries,
-		EFruits,
-		EColors,
-		EAdjectives
-	} ETopic;
+	enum TOPIC {
+		topicCountries,
+		topicFruits,
+		topicColors
+	} raffledTopic;
 
-	ETopic = rand() % NUMBER_OF_TOPICS;
+    raffledTopic = rand() % NUMBER_OF_TOPICS;
 
-	if(ETopic == ECountries) {
-		topic = malloc(strlen("Paises") * sizeof(char));
-		wasAllocated(topic);
+	if(raffledTopic == topicCountries) {
 		topic = "paises";
 		index = rand() % NUMBER_OF_COUNTRIES;
 		stringLength = strlen(countries[index]);
@@ -79,9 +80,7 @@ int main(int argc, char **argv) {
 		correctLetters = malloc(stringLength * sizeof(char));
 		wasAllocated(correctLetters);
 		strcpy(secretWord, countries[index]);
-	} else if(ETopic == EFruits) {
-		topic = malloc(strlen("Frutas") * sizeof(char));
-		wasAllocated(topic);
+	} else if(raffledTopic == topicFruits) {
 		topic = "frutas";
 		index = rand() % NUMBER_OF_FRUITS;
 		stringLength = strlen(fruits[index]);
@@ -90,9 +89,16 @@ int main(int argc, char **argv) {
 		correctLetters = malloc(stringLength * sizeof(char));
 		wasAllocated(correctLetters);
 		strcpy(secretWord, fruits[index]);
-	} else if(ETopic == EAdjectives) {
-		topic = malloc(strlen("Adjetivos") * sizeof(char));
-		wasAllocated(topic);
+	} else if(raffledTopic == topicColors) {
+        topic = "cores";
+        index = rand() % NUMBER_OF_COLORS;
+		stringLength = strlen(colors[index]);
+		secretWord = malloc(stringLength * sizeof(char));
+		wasAllocated(secretWord);
+		correctLetters = malloc(stringLength * sizeof(char));
+		wasAllocated(correctLetters);
+		strcpy(secretWord, colors[index]);
+	} else {
 		topic = "adjetivos";
 		index = rand() % NUMBER_OF_ADJECTIVES;
 		stringLength = strlen(adjectives[index]);
@@ -101,23 +107,12 @@ int main(int argc, char **argv) {
 		correctLetters = malloc(stringLength * sizeof(char));
 		wasAllocated(correctLetters);
 		strcpy(secretWord, adjectives[index]);
-	} else {
-		topic = malloc(strlen("Cores") * sizeof(char));
-		wasAllocated(topic);
-		topic = "cores";
-		index = rand() % NUMBER_OF_COLORS;
-		stringLength = strlen(colors[index]);
-		secretWord = malloc(stringLength * sizeof(char));
-		wasAllocated(secretWord);
-		correctLetters = malloc(stringLength * sizeof(char));
-		wasAllocated(correctLetters);
-		strcpy(secretWord, colors[index]);
 	}
 
 	initializeLives(lives, SYMBOL_OF_LIFE);
 	initializeCorrectLetters(correctLetters, SYMBOL_OF_NONE, stringLength);
 
-	for(int counter = 1; counter <= stringLength; counter++) {
+	for(int counter = 0; counter < stringLength; counter++) {
 		bonus += BONUS_RATE;
 	}
 
