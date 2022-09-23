@@ -5,12 +5,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#define TOTAL_LIVES 5
+#include <unistd.h>
+#define NUMBER_OF_ADJECTIVES 31
+#define NUMBER_OF_COLORS 16
 #define NUMBER_OF_COUNTRIES 30
 #define NUMBER_OF_FRUITS 15
-#define NUMBER_OF_COLORS 16
-#define NUMBER_OF_ADJECTIVES 31
 #define NUMBER_OF_TOPICS 4
+#define TOTAL_LIVES 5
 
 /*
 x=================================================x
