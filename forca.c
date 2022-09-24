@@ -11,6 +11,7 @@
 #define NUMBER_OF_COUNTRIES 30
 #define NUMBER_OF_FRUITS 15
 #define NUMBER_OF_TOPICS 4
+#define TIME 5 // em segundos
 #define TOTAL_LIVES 5
 
 /*
@@ -57,7 +58,8 @@ int main(int argc, char **argv) {
 	const char SYMBOL_OF_LIFE = '@', SYMBOL_OF_NONE = '~';
 	bool win = false, lose = false, correct;
 	const int SCORE_RATE = 218, BONUS_RATE = 18;
-	int stringLength, indexLives = TOTAL_LIVES - 1, topicIndex, index, score = SCORE_RATE * TOTAL_LIVES, bonus = 0;
+	int stringLength, indexLives = TOTAL_LIVES - 1, topicIndex, index, score = SCORE_RATE * TOTAL_LIVES, bonus = 0, totalScore;
+	FILE *file;
 
 	lives = malloc(TOTAL_LIVES * sizeof(char));
 	wasAllocated(lives);
@@ -71,6 +73,9 @@ int main(int argc, char **argv) {
 	} raffledTopic;
 
     raffledTopic = rand() % NUMBER_OF_TOPICS;
+
+	system("setterm --background yellow");
+	system("setterm --foreground black");
 
 	if(raffledTopic == topicCountries) {
 		topic = "paises";
@@ -119,6 +124,8 @@ int main(int argc, char **argv) {
 
 	score += bonus;
 
+	totalScore = score;
+
 	while(!win && !lose) {
 		system("clear");
 		title();
@@ -146,9 +153,22 @@ int main(int argc, char **argv) {
 			lose = true;
 			system("clear");
 			title();
-			printf("Pontuação: %d\n", score);
+			printf("Pontuação: %d de %d\n", score, totalScore);
 			printf("Palavra secreta: %s\n", secretWord);
 			puts("Você perdeu!!! :(");
+
+			file = fopen("scores.txt", "at");
+			if(file == NULL) {
+				fprintf(stderr, "Falha na abertura de arquivo!\n");
+				return EXIT_FAILURE;
+			}
+
+			fprintf(file, "Pontuação: %d de %d\n", score, totalScore);
+			fprintf(file, "Palavra secreta: %s\n", secretWord);
+			fprintf(file, "Você perdeu!!! :-(\n");
+			fprintf(file, "--------------------\n");
+
+			fclose(file);
 		}
 
 		if(islower(*correctLetters)) {
@@ -160,9 +180,23 @@ int main(int argc, char **argv) {
 			system("clear");
 			title();
 			printf("Vidas: %s\n", lives);
-			printf("Pontuação: %d\n", score);
+			printf("Pontuação: %d de %d\n", score, totalScore);
 			printf("Palavra secreta: %s\n", secretWord);
-			puts("Você venceu!!! :)");
+			puts("Você venceu!!! :-)");
+
+			file = fopen("scores.txt", "at");
+			if(file == NULL) {
+				fprintf(stderr, "Falha na abertura de arquivo!\n");
+				return EXIT_FAILURE;
+			}
+
+			fprintf(file, "Vidas: %s\n", lives);
+			fprintf(file, "Pontuação: %d de %d\n", score, totalScore);
+			fprintf(file, "Palavra secreta: %s\n", secretWord);
+			fprintf(file, "Você venceu!!! :)\n");
+			fprintf(file, "--------------------\n");
+
+			fclose(file);
 		}
 
 		__fpurge(stdin);
@@ -171,6 +205,9 @@ int main(int argc, char **argv) {
 	free(secretWord);
 	free(correctLetters);
 	free(lives);
+
+	sleep(TIME);
+	system("setterm --reset");
 
 	return EXIT_SUCCESS;
 }
