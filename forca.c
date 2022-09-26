@@ -96,8 +96,8 @@ int main(int argc, char **argv) {
 		wasAllocated(correctLetters);
 		strcpy(secretWord, fruits[index]);
 	} else if(raffledTopic == topicColors) {
-        topic = "cores";
-        index = rand() % NUMBER_OF_COLORS;
+		topic = "cores";
+		index = rand() % NUMBER_OF_COLORS;
 		stringLength = strlen(colors[index]);
 		secretWord = malloc(stringLength * sizeof(char));
 		wasAllocated(secretWord);
@@ -214,8 +214,8 @@ int main(int argc, char **argv) {
 
 void title() {
 	puts("x===============x\n"\
-		 "| JOGO DA FORCA |\n"\
-		 "x===============x\n");
+		"| JOGO DA FORCA |\n"\
+		"x===============x\n");
 }
 
 void wasAllocated(char *array) {
