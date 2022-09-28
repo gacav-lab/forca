@@ -11,8 +11,8 @@
 #define NUMBER_OF_COUNTRIES 30
 #define NUMBER_OF_FRUITS 15
 #define NUMBER_OF_TOPICS 4
-#define TIME 5 // em segundos
 #define TOTAL_LIVES 5
+#define TIME 5
 
 /*
 x=================================================x
@@ -28,7 +28,7 @@ x=================================================x
 
 void title(void);
 void initializeLives(char *lives, const char SYMBOL);
-void initializeCorrectLetters(char *correctLetters, const char SYMBOL, int stringLength);
+void initializeCorrectLetters(char *correctLetters, const char SYMBOL, unsigned short stringLength);
 void wasAllocated(char *array);
 
 int main(int argc, char **argv) {
@@ -57,8 +57,8 @@ int main(int argc, char **argv) {
 	}, *secretWord = NULL, *correctLetters = NULL, *lives = NULL, *topic = NULL, kick;
 	const char SYMBOL_OF_LIFE = '@', SYMBOL_OF_NONE = '~';
 	bool win = false, lose = false, correct;
-	const int SCORE_RATE = 218, BONUS_RATE = 18;
-	int stringLength, indexLives = TOTAL_LIVES - 1, topicIndex, index, score = SCORE_RATE * TOTAL_LIVES, bonus = 0, totalScore;
+	const unsigned short SCORE_RATE = 218, BONUS_RATE = 18;
+	unsigned short stringLength, indexLives = TOTAL_LIVES - 1, topicIndex, index, score = SCORE_RATE * TOTAL_LIVES, bonus = 0, totalScore;
 	FILE *file;
 
 	lives = malloc(TOTAL_LIVES * sizeof(char));
@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
 
     raffledTopic = rand() % NUMBER_OF_TOPICS;
 
-	system("setterm --background yellow");
+	system("setterm --background cyan");
 	system("setterm --foreground black");
 
 	if(raffledTopic == topicCountries) {
@@ -118,7 +118,7 @@ int main(int argc, char **argv) {
 	initializeLives(lives, SYMBOL_OF_LIFE);
 	initializeCorrectLetters(correctLetters, SYMBOL_OF_NONE, stringLength);
 
-	for(int counter = 0; counter < stringLength; counter++) {
+	for(unsigned short counter = 0; counter < stringLength; counter++) {
 		bonus += BONUS_RATE;
 	}
 
@@ -137,7 +137,7 @@ int main(int argc, char **argv) {
 		printf("Chute: ");
 		scanf("%c", &kick);
 
-		for(int i = 0; i < stringLength; i++) {
+		for(unsigned short i = 0; i < stringLength; i++) {
 			if(toupper(kick) == toupper(secretWord[i])) {
 				correctLetters[i] = kick;
 				correct = true;
@@ -146,16 +146,17 @@ int main(int argc, char **argv) {
 
 		if(!correct) {
 			lives[indexLives--] = ' ';
-			score -= SCORE_RATE;
+			score -= SCORE_RATE - BONUS_RATE;
 		}
 
 		if(*lives == ' ') {
 			lose = true;
 			system("clear");
 			title();
-			printf("Pontuação: %d de %d\n", score, totalScore);
+			score -= score;
+			printf("Pontuação: %hu de %hu\n", score, totalScore);
 			printf("Palavra secreta: %s\n", secretWord);
-			puts("Você perdeu!!! :(");
+			puts("Você perdeu!!! :-(");
 
 			file = fopen("scores.txt", "at");
 			if(file == NULL) {
@@ -163,7 +164,7 @@ int main(int argc, char **argv) {
 				return EXIT_FAILURE;
 			}
 
-			fprintf(file, "Pontuação: %d de %d\n", score, totalScore);
+			fprintf(file, "Pontuação: %hu de %hu\n", score, totalScore);
 			fprintf(file, "Palavra secreta: %s\n", secretWord);
 			fprintf(file, "Você perdeu!!! :-(\n");
 			fprintf(file, "--------------------\n");
@@ -180,7 +181,7 @@ int main(int argc, char **argv) {
 			system("clear");
 			title();
 			printf("Vidas: %s\n", lives);
-			printf("Pontuação: %d de %d\n", score, totalScore);
+			printf("Pontuação: %hu de %hu\n", score, totalScore);
 			printf("Palavra secreta: %s\n", secretWord);
 			puts("Você venceu!!! :-)");
 
@@ -191,9 +192,9 @@ int main(int argc, char **argv) {
 			}
 
 			fprintf(file, "Vidas: %s\n", lives);
-			fprintf(file, "Pontuação: %d de %d\n", score, totalScore);
+			fprintf(file, "Pontuação: %hu de %hu\n", score, totalScore);
 			fprintf(file, "Palavra secreta: %s\n", secretWord);
-			fprintf(file, "Você venceu!!! :)\n");
+			fprintf(file, "Você venceu!!! :-)\n");
 			fprintf(file, "--------------------\n");
 
 			fclose(file);
@@ -214,8 +215,8 @@ int main(int argc, char **argv) {
 
 void title() {
 	puts("x===============x\n"\
-		"| JOGO DA FORCA |\n"\
-		"x===============x\n");
+		 "| JOGO DA FORCA |\n"\
+		 "x===============x\n");
 }
 
 void wasAllocated(char *array) {
@@ -231,8 +232,8 @@ void initializeLives(char *lives, const char SYMBOL) {
 	}
 }
 
-void initializeCorrectLetters(char *correctLetters, const char SYMBOL, int stringLength) {
-	for(int i = 0; i < stringLength; i++) {
+void initializeCorrectLetters(char *correctLetters, const char SYMBOL, unsigned short stringLength) {
+	for(unsigned short i = 0; i < stringLength; i++) {
 		*(correctLetters + i) = SYMBOL;
 	}
 }
