@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+// Data: 29/09/2022
+
 void title(void);
 void menu(void);
 void drawTrophy(void);

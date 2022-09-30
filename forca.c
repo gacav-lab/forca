@@ -22,7 +22,7 @@ x=================================================x
 | Versão da linguagem: C17                        |
 | Compatível com: sistemas Unix-like              |
 | Compilador: GCC                                 |
-| Github: https://github.com/gabrielcavalcante-cs |
+| Github: https://github.com/gacav-lab |
 x=================================================x
 */
 
