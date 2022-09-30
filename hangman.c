@@ -14,18 +14,6 @@
 #define TOTAL_LIVES 5
 #define TIME 5
 
-/*
-x=================================================x
-| Autor: Gabriel Cavalcante de Jesus Oliveira     |
-| Data: 28/08/2022                                |
-| Linguagem de programação: C                     |
-| Versão da linguagem: C17                        |
-| Compatível com: sistemas Unix-like              |
-| Compilador: GCC                                 |
-| Github: https://github.com/gacav-lab |
-x=================================================x
-*/
-
 void title(void);
 void initializeLives(char *lives, const char SYMBOL);
 void initializeCorrectLetters(char *correctLetters, const char SYMBOL, unsigned short stringLength);
