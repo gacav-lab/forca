@@ -12,14 +12,16 @@
 #define NUMBER_OF_FRUITS 15
 #define NUMBER_OF_TOPICS 4
 #define TOTAL_LIVES 5
-#define TIME 5
 
 void title(void);
 void initializeLives(char *lives, const char SYMBOL);
 void initializeCorrectLetters(char *correctLetters, const char SYMBOL, unsigned short stringLength);
 void wasAllocated(char *array);
+void drawTrophy(void);
 
 int main(int argc, char **argv) {
+	char buffer;
+
 	char countries[][11] = {
 		"Brasil", "Alemanha", "Dinamarca", "Equador", "Mexico", "Espanha",
 		"Chile", "Bolivia", "Portugal", "Madagascar", "Japao", "China",
@@ -144,7 +146,7 @@ int main(int argc, char **argv) {
 			score -= score;
 			printf("Pontuação: %hu de %hu\n", score, totalScore);
 			printf("Palavra secreta: %s\n", secretWord);
-			puts("Você perdeu!!! :-(");
+			printf("Você perdeu!!! :-(\n\n");
 
 			file = fopen("scores.txt", "at");
 			if(file == NULL) {
@@ -171,7 +173,8 @@ int main(int argc, char **argv) {
 			printf("Vidas: %s\n", lives);
 			printf("Pontuação: %hu de %hu\n", score, totalScore);
 			printf("Palavra secreta: %s\n", secretWord);
-			puts("Você venceu!!! :-)");
+			printf("Você venceu!!! :-)\n\n");
+			drawTrophy();
 
 			file = fopen("scores.txt", "at");
 			if(file == NULL) {
@@ -195,16 +198,18 @@ int main(int argc, char **argv) {
 	free(correctLetters);
 	free(lives);
 
-	sleep(TIME);
+	printf("Pressione a tecla \"enter\" para sair\n");
+	scanf("*%c", &buffer);
+
 	system("setterm --reset");
 
 	return EXIT_SUCCESS;
 }
 
 void title() {
-	puts("x===============x\n"\
-		 "| JOGO DA FORCA |\n"\
-		 "x===============x\n");
+	printf("x===============x\n"\
+		   "| JOGO DA FORCA |\n"\
+		   "x===============x\n\n");
 }
 
 void wasAllocated(char *array) {
@@ -224,4 +229,17 @@ void initializeCorrectLetters(char *correctLetters, const char SYMBOL, unsigned 
 	for(unsigned short i = 0; i < stringLength; i++) {
 		*(correctLetters + i) = SYMBOL;
 	}
+}
+
+void drawTrophy(void) {
+    printf("   ___________\n");
+    printf("  '._==_==_=_.'\n");
+    printf("  .-\\:      /-.\n");
+    printf(" | (|:.     |) |\n");
+    printf("  '-|:.     |-'\n");
+    printf("    \\::.    /\n");
+    printf("     '::. .'\n");
+    printf("       ) (\n");
+    printf("     _.' '._\n");
+    printf("    `\"\"\"\"\"\"\"`\n\n");
 }
