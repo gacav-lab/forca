@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-// Data: 29/09/2022
-
 void title(void);
 void menu(void);
 void drawTrophy(void);
@@ -11,6 +9,7 @@ void drawSadFace(void);
 void drawSeriousFace(void);
 
 int main(int argc, char **argv) {
+	char buffer;
     unsigned short playerChoice, machineChoice;
 
     system("setterm --foreground black");
@@ -34,13 +33,13 @@ int main(int argc, char **argv) {
 
     switch(choice) {
         case rock:
-            puts("Você escolheu pedra");
+            printf("Você escolheu pedra\n");
             break;
         case paper:
-            puts("Você escolheu papel");
+            printf("Você escolheu papel\n");
             break;
         case scissors:
-            puts("Você escolheu tesoura");
+            printf("Você escolheu tesoura\n");
     }
 
     machineChoice = rand() % 3;
@@ -49,27 +48,28 @@ int main(int argc, char **argv) {
 
     switch(choice) {
         case rock:
-            puts("A máquina escolheu pedra");
+            printf("A máquina escolheu pedra\n");
             break;
         case paper:
-            puts("A máquina escolheu papel");
+            printf("A máquina escolheu papel\n");
             break;
         case scissors:
-            puts("A máquina escolheu tesoura");
+            printf("A máquina escolheu tesoura\n");
     }
 
     if((playerChoice == rock && machineChoice == scissors) ||
     (playerChoice == scissors && machineChoice == paper) ||
     (playerChoice == paper && machineChoice == rock)) {
         drawTrophy();
-        puts("Você venceu!!! :-)");
+        printf("Você venceu!!! :-)\n\n");
     } else if(playerChoice == machineChoice) {
-		drawSeriousFace();
-        puts("Empatado :-|");
+        printf("Empatado :-|\n\n");
     } else {
-        drawSadFace();
-        puts("Você perdeu!!! :-(");
+        printf("Você perdeu!!! :-(\n\n");
     }
+
+	printf("Pressione a tecla \"enter\" para sair");
+	scanf("*%c", &buffer);
 
 	system("setterm --reset");
 
@@ -77,34 +77,26 @@ int main(int argc, char **argv) {
 }
 
 void title(void) {
-    puts("x===========x\n"\
+    printf("x===========x\n"\
          "| JANKENPON |\n"\
          "x===========x\n");
 }
 
 void menu(void) {
-    puts("1 - Pedra\n"\
-         "2 - Papel\n"\
-         "3 - Tesoura\n");
+    printf("1 - Pedra\n"\
+           "2 - Papel\n"\
+           "3 - Tesoura\n\n");
 }
 
 void drawTrophy(void) {
-    puts("   ___________");
-    puts("  '._==_==_=_.'");
-    puts("  .-\\:      /-.");
-    puts(" | (|:.     |) |");
-    puts("  '-|:.     |-'");
-    puts("    \\::.    /");
-    puts("     '::. .'");
-    puts("       ) (");
-    puts("     _.' '._");
-    puts("    `\"\"\"\"\"\"\"`\n\n");
-}
-
-void drawSadFace(void) {
-    //TODO
-}
-
-void drawSeriousFace(void) {
-    //TODO
+    printf("   ___________\n");
+    printf("  '._==_==_=_.'\n");
+    printf("  .-\\:      /-.\n");
+    printf(" | (|:.     |) |\n");
+    printf("  '-|:.     |-'\n");
+    printf("    \\::.    /\n");
+    printf("     '::. .'\n");
+    printf("       ) (\n");
+    printf("     _.' '._\n");
+    printf("    `\"\"\"\"\"\"\"`\n\n");
 }
