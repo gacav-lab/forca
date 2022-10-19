@@ -14,4 +14,4 @@ Compatível com: sistemas Unix-like
 
 Compilador: GCC
 
-Github: https://github.com/gacav-lab/games
+Github: https://github.com/gacav-lab/forca
